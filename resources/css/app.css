@@ -1,0 +1,72 @@
+/* Hero section styling to take full screen */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden;
+    z-index: 1; /* Ensure hero section stays on top */
+}
+
+.carousel-item {
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh; /* Memastikan gambar mengisi tinggi layar */
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+    ); /* Make caption background semi-transparent */
+    color: white;
+    padding: 10px 20px; /* Add some padding to the caption */
+    z-index: 2; /* Ensure caption is above the image */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black; /* Optional: Change color of control icons */
+}
+
+footer {
+    background-color: #f8f9fa; /* Light background color */
+    color: #343a40; /* Dark text color */
+    font-family: Arial, sans-serif;
+}
+
+footer h5 {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+footer .btn {
+    font-weight: bold;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .text-md-right {
+    text-align: right;
+}
+
+footer .mx-2 {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#modalProductDescription {
+    text-align: justify !important;
+}
