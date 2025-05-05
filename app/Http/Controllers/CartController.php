@@ -46,7 +46,7 @@ class CartController extends Controller
 
         $cartItem->save();
 
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success', 'Cart updated successfully.');
     }
 
     public function add(Request $request)
