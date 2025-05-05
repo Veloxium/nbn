@@ -70,3 +70,9 @@ footer .mx-2 {
 #modalProductDescription {
     text-align: justify !important;
 }
+
+.custom-btn {
+    background-color: #d9d9d9;
+    width: 360px;
+    height: 50px;
+}
