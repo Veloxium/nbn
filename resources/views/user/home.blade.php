@@ -25,37 +25,37 @@
 
 <!-- New Products Section -->
 <section id="new-products">
-    @foreach($products as $product)
     <div class="container px-3 mt-3">
         <h2 class="mt-5">New Products</h2>
         <hr style="width: 100%; margin: 20px auto; border: 1px solid #000;">
     </div>
     <div class="container text-center">
         <div class="row mt-4">
+            @foreach($products as $product)
             <div class="col-md-3 mb-4">
                 <div class="card" data-bs-toggle="modal" data-bs-target="#productDetailModal" data-product-id="{{ $product->id }}">
-                        <img src="{{ asset('images/' . $product->image) }}" class="card-img-top img-fluid" alt="product-image">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 50) }}</p>
-                        </div>
+                    <img src="{{ asset('images/' . $product->image) }}" class="card-img-top img-fluid" alt="product-image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 50) }}</p>
                     </div>
+                </div>
                 </a>
             </div>
+            @endforeach
         </div>
     </div>
-    @endforeach
 </section>
 
-<!-- Our Products Section -->
+<!-- Products Section -->
 <section id="products" class="mt-5">
-@foreach($products as $product)
     <div class="container px-3">
-        <h2 class="mt-5">Our Products</h2>
+        <h2 class="mt-5">Products</h2>
         <hr style="width: 100%; margin: 20px auto; border: 1px solid #000;">
     </div>
     <div class="container text-center">
         <div class="row mt-4">
+            @foreach($products as $product)
             <div class="col-md-3 mb-4">
                 <div class="card" data-bs-toggle="modal" data-bs-target="#productDetailModal" data-product-id="{{ $product->id }}">
                     <img src="{{ asset('images/' . $product->image) }}" class="card-img-top" alt="product-image">
@@ -129,20 +129,25 @@
 @endsection
 
 @section('scripts')
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const productCards = document.querySelectorAll('.card');
-            productCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    const productId = this.getAttribute('data-product-id');
-
-                     // Mengambil data produk dan mengisi modal
-                    fetch(`/product/${productId}`)
-                    .then(response => response.json())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productCards = document.querySelectorAll('.card');
+        productCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                console.log('Product ID:', productId); // Debugging line
+                // Mengambil data produk dan mengisi modal
+                fetch(`/product/${productId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(product => {
                         // Mengupdate modal dengan data produk
                         document.getElementById('modalProductTitle').textContent = product.name;
@@ -158,13 +163,16 @@
                             const item = document.createElement('div');
                             item.classList.add('carousel-item');
                             if (index === 0) item.classList.add('active');
-                            item.innerHTML = `<img src="${image}" class="d-block w-100" alt="product-image">`;
+                            item.innerHTML = `<img src="images/${image}" class="d-block w-100" alt="product-image">`;
                             carouselInner.appendChild(item);
                         });
                     })
-                    .catch(error => console.log(error));
-                });
+                    .catch(error => {
+                        console.error('Error fetching product data:', error);
+                        alert('Failed to load product details. Please try again later.');
+                    });
             });
         });
-    </script>
+    });
+</script>
 @endsection
