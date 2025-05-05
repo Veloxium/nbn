@@ -31,7 +31,7 @@
     </div>
     <div class="container text-center">
         <div class="row mt-4">
-            @foreach($products as $product)
+            @foreach($newProducts as $product)
             <div class="col-md-3 mb-4">
                 <div class="card" data-bs-toggle="modal" data-bs-target="#productDetailModal" data-product-id="{{ $product->id }}">
                     <img src="{{ asset('images/' . $product->image) }}" class="card-img-top img-fluid" alt="product-image">
@@ -55,7 +55,7 @@
     </div>
     <div class="container text-center">
         <div class="row mt-4">
-            @foreach($products as $product)
+            @foreach($allProducts as $product)
             <div class="col-md-3 mb-4">
                 <div class="card" data-bs-toggle="modal" data-bs-target="#productDetailModal" data-product-id="{{ $product->id }}">
                     <img src="{{ asset('images/' . $product->image) }}" class="card-img-top" alt="product-image">
