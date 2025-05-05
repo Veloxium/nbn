@@ -19,7 +19,7 @@
         <p>Postage: Rp{{ number_format($postage, 0, ',', '.') }}</p>
         <hr>
         <h5>Total: Rp{{ number_format($total, 0, ',', '.') }}</h5>
-        <form method="POST" action="{{ route('order.store') }}">
+        <form method="POST" action="{{ route('products.store') }}">
     @csrf
     <button type="submit" class="btn btn-success w-100 mt-3">Confirm Checkout</button>
 </form>
