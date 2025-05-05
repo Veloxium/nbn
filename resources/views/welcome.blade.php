@@ -30,7 +30,7 @@
                                     <a href="{{ route('home') }}" class="btn btn-primary">{{ __('Home') }}</a>
 
                                     <!-- Tombol Logout -->
-                                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                    <form method="GET" action="{{ route('logout') }}" style="display: inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-danger">{{ __('Logout') }}</button>
                                     </form>
