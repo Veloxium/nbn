@@ -87,10 +87,11 @@
                 <ul class="navbar-nav ms-auto ml-auto">
                     @auth
                     <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                        {{-- <form action="{{ route('logout') }}" method="GET" class="d-inline">
                             @csrf
                             <button type="submit" class="nav-link btn btn-link p-0 m-0 align-baseline">Logout</button>
-                        </form>
+                        </form> --}}
                     </li>
                     @else
                     <li class="nav-item">
