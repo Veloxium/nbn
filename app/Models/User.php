@@ -11,9 +11,13 @@ use App\Models\LoginHistory;
 class User extends Authenticatable
 {
     public function loginHistories()
-{
-    return $this->hasMany(\App\Models\LoginHistory::class);
-}
+    {
+        return $this->hasMany(\App\Models\LoginHistory::class);
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -24,9 +28,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role'
+        'name',
+        'email',
+        'password',
+        'role'
     ];
-    
+
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -55,4 +62,3 @@ class User extends Authenticatable
         ];
     }
 }
-
