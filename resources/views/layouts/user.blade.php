@@ -68,7 +68,7 @@
                         <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('home') }}#new-products">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('payment.index')) active @endif">Payment</a>
+                        <a class="nav-link @if(request()->routeIs('payment.create')) active @endif" href="{{ route('payments.index') }}">Payments</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('cart.index') }}">
@@ -88,10 +88,6 @@
                     @auth
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
-                        {{-- <form action="{{ route('logout') }}" method="GET" class="d-inline">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link p-0 m-0 align-baseline">Logout</button>
-                        </form> --}}
                     </li>
                     @else
                     <li class="nav-item">

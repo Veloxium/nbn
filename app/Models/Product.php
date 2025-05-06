@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'price', 'image', 'colors'];
+    use HasFactory;
+
+    protected $fillable = ['name', 'description', 'price', 'image', 'stock', 'colors'];
 
     protected $casts = [
         'colors' => 'array',
     ];
+    public function paymentItems()
+    {
+        return $this->hasMany(PaymentsProduct::class);
+    }
 }

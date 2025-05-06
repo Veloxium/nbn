@@ -15,7 +15,19 @@
                     </div>
                     <div class="card-body">
                         <!-- Di sini Anda bisa menampilkan data dinamis, seperti jumlah pengguna -->
-                        <p>1000 Users</p>
+                        <p>{{ $userCount }} Users</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Total Products
+                    </div>
+                    <div class="card-body">
+                        <!-- Di sini Anda bisa menampilkan data dinamis, seperti jumlah pengguna -->
+                        <p>{{ $productCount }} Products</p>
                     </div>
                 </div>
             </div>
