@@ -25,7 +25,7 @@
                 @auth
                 @if(auth()->user()->role === 'admin')
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
                         Product
                     </a>
                 </li>
@@ -41,7 +41,7 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li>
+                        {{-- <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li> --}}
                         <li>
                             <hr class="dropdown-divider">
                         </li>
