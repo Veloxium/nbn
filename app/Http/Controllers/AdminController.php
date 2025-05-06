@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -11,6 +14,10 @@ class AdminController extends Controller
     {
         // Tambahkan log untuk memastikan controller dipanggil
         Log::info('Admin dashboard accessed.');
-        return view('admin.dashboard');  // Pastikan view ada dan benar
+        $userCount = User::count();
+        $productCount = Product::count();
+        return view('admin.dashboard', compact('userCount', 'productCount'));  // Pastikan view ada dan benar
     }
+
+
 }
