@@ -3,7 +3,7 @@
 @section('title', 'Your Cart')
 
 @section('content')
-<div class="container mt-5 d-flex gap-4" style="min-height: calc(100vh - 290px);">
+<div class="container mt-5 d-flex gap-4" style="min-height: calc(100vh - 400px);">
     <div class="d-flex flex-column" style="width: 66.666%;">
         <h3>Your Cart</h3>
         @if ($cartItems->isEmpty())
@@ -92,7 +92,7 @@
                 <p class="mt-4 mb-0 text-center fs-4 fw-semibold">Total: Rp.
                     {{ number_format($cartItems->sum(function ($item) {
                         return $item->product->price * $item->quantity;
-                    }), 0, ',', '.') }}
+                    }) * 1.1, 0, ',', '.') }}
                 </p>
                 <div class="p-4">
                     <a href="{{ route('checkout') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>

@@ -117,4 +117,19 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
+    public function showPublic($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return response()->json([
+            'id' => $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'full_description' => $product->full_description ?? '',
+            'price' => number_format($product->price, 0, ',', '.'),
+            'image' => $product->image,
+            'stock' => $product->stock,
+            'colors' => $product->colors,
+        ]);
+    }
 }

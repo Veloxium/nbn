@@ -3,9 +3,13 @@
 @section('title', 'Payment Page')
 
 @section('content')
-<div class="container">
+<div class="container mt-5" style="min-height: calc(100vh - 340px);">
     <h2 class="mb-4">Your Payments</h2>
-
+    @if ($payments->isEmpty())
+    <div class="alert alert-info" role="alert">
+        You have no payments yet. Please make a payment to see it here.
+    </div>
+    @endif
     @foreach ($payments as $payment)
     <div class="card mb-4">
         <div class="card-body">
