@@ -12,37 +12,22 @@
 
     <form action="{{ route('payments.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
         </div>
-
         <div class="mb-3">
             <label class="form-label">Phone</label>
             <input type="text" name="phone" class="form-control" required value="{{ old('phone') }}">
         </div>
-
         <div class="mb-3">
             <label class="form-label">Postal Code</label>
             <input type="text" name="postal_code" class="form-control" required value="{{ old('postal_code') }}">
         </div>
-
         <div class="mb-3">
             <label class="form-label">Address</label>
             <textarea name="address" class="form-control" required>{{ old('address') }}</textarea>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Amount</label>
-            <input type="number" name="amount" step="0.01" class="form-control" required value="{{ old('amount') }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Proof of Payment (Image)</label>
-            <input type="file" name="proof_of_payment" accept="image/*" class="form-control">
-        </div>
-
         <button type="submit" class="btn btn-primary">Submit Payment</button>
     </form>
 </div>

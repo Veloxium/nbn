@@ -95,7 +95,7 @@
                     }) * 1.1, 0, ',', '.') }}
                 </p>
                 <div class="p-4">
-                    <a href="{{ route('checkout') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>
+                    <a href="{{ route('userform') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>
                 </div>
             </div>
         </div>

@@ -16,6 +16,6 @@ class CheckoutController extends Controller
         $postage = 39000;
         $total = $subtotal + $postage;
 
-        return view('user.checkout', compact('cartItems', 'subtotal', 'postage', 'total'));
+        return view('payments.creditcard', compact('cartItems', 'subtotal', 'postage', 'total'));
     }
 }

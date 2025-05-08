@@ -11,3 +11,4 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('products', ProductController::class)->names('admin.products');
 });
+
