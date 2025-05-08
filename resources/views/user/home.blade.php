@@ -194,7 +194,7 @@
 
                 // Update modal content
                 document.getElementById('modalProductTitle').textContent = product.name;
-                document.getElementById('modalProductSubTitle').textContent = product.description;
+                document.getElementById('modalProductSubTitle').innerHTML = product.description;
                 document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
                 document.getElementById('modalProductId').value = product.id;
 

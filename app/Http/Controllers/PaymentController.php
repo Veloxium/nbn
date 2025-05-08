@@ -41,4 +41,22 @@ class PaymentController extends Controller
 
         return redirect()->route('payments.index')->with('success', 'Proof of payment uploaded successfully!');
     }
+
+    public function userform()
+    {
+        return view('payments.userform');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+        ]);
+
+
+        return redirect()->route('payments.index')->with('success', 'User information saved successfully!');
+    }
 }
