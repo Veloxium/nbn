@@ -51,7 +51,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid mx-4">
 
-            <a class="navbar-brand fw-semibold fs-2 d-flex justify-content-center align-items-center gap-2" href="{{ route('home') }}">
+            <a class="navbar-brand fw-semibold fs-2 d-flex justify-content-center align-items-center gap-2" href="{{ route('user.homepage') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" width="60" height="60" class="d-inline-block align-text-top">
                 NBN
             </a>
@@ -62,10 +62,10 @@
                 <!-- Navbar Menu Items (Center Alignment for Home, Products, Cart) -->
                 <ul class="navbar-nav center-nav">
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('user.homepage') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('home') }}#new-products">Products</a>
+                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('user.homepage') }}#new-products">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('payment.create')) active @endif" href="{{ route('payments.index') }}">Payments</a>
