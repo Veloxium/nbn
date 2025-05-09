@@ -32,33 +32,34 @@
     <div class="container text-center">
         <div class="row mt-4">
             @foreach ($newProducts as $product)
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" style="{{ $product->stock === 0 ? 'display: none;' : '' }}">
                 <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productDetailModal"
                     data-product-id="{{ $product->id }}">
                     <div style="height: 200px;">
                         <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
                             alt="product-image">
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-end">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>
-                        <p class="card-text">{{ 'Rp ' . number_format($product->price, 0, ',', '.') }}</p>
+                        <p class="card-text fs-5 fw-bold mb-0">{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</p>
                         <p class="card-text"><small class="text-muted">Stock: {{ $product->stock }}</small></p>
-                        @php
-                        $colors = is_array($product->colors)
-                        ? $product->colors
-                        : json_decode($product->colors, true);
-                        @endphp
+                        <div class="d-flex align-items-center">
+                            @php
+                            $colors = is_array($product->colors)
+                            ? $product->colors
+                            : json_decode($product->colors, true);
+                            @endphp
 
-                        @if ($colors)
-                        @foreach ($colors as $color)
-                        <span
-                            style="display:inline-block;width:20px;height:20px;background:{{ $color }};border-radius:50%;margin-right:5px;"></span>
-                        @endforeach
-                        @else
-                        <span class="text-muted">Tidak ada warna</span>
-                        @endif
-
+                            @if ($colors)
+                            @foreach ($colors as $color)
+                            <span
+                                style="display:inline-block;width:20px;height:20px;background:{{ $color }};border-radius:50%;margin-right:5px;"></span>
+                            @endforeach
+                            @else
+                            <span class="text-muted">Tidak ada warna</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 </a>
@@ -80,7 +81,7 @@
             <p class="text-muted">No products available at the moment.</p>
             @else
             @foreach ($allProducts as $product)
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" style="{{ $product->stock === 0 ? 'display: none;' : '' }}">
                 <div class="card h-100"
                     data-bs-toggle="modal"
                     data-bs-target="#productDetailModal"
@@ -95,24 +96,26 @@
                         <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
                             alt="product-image">
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-end">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>
-                        <p class="card-text">{{ 'Rp ' . number_format($product->price, 0, ',', '.') }}</p>
+                        <p class="card-text fs-5 fw-bold mb-0">{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</p>
                         <p class="card-text"><small class="text-muted">Stock: {{ $product->stock }}</small></p>
-                        @php
-                        $colors = is_array($product->colors)
-                        ? $product->colors
-                        : json_decode($product->colors, true);
-                        @endphp
+                        <div class="d-flex align-items-center">
+                            @php
+                            $colors = is_array($product->colors)
+                            ? $product->colors
+                            : json_decode($product->colors, true);
+                            @endphp
 
-                        @if ($colors)
-                        @foreach ($colors as $color)
-                        <span style="display:inline-block;width:20px;height:20px;background:{{ $color }};border-radius:50%;margin-right:5px;"></span>
-                        @endforeach
-                        @else
-                        <span class="text-muted">Tidak ada warna</span>
-                        @endif
+                            @if ($colors)
+                            @foreach ($colors as $color)
+                            <span style="display:inline-block;width:20px;height:20px;background:{{ $color }};border-radius:50%;margin-right:5px;"></span>
+                            @endforeach
+                            @else
+                            <span class="text-muted">Tidak ada warna</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,18 +193,18 @@
         });
     });
 
-function showProductDetail(productId) {
-    // Fetch product details from the backend
-    fetch(`/product/${productId}`)
-        .then(response => response.json())
-        .then(product => {
-            console.log('Fetched product:', product);
+    function showProductDetail(productId) {
+        // Fetch product details from the backend
+        fetch(`/product/${productId}`)
+            .then(response => response.json())
+            .then(product => {
+                console.log('Fetched product:', product);
 
-            // Update modal content
-            document.getElementById('modalProductTitle').textContent = product.name;
-            document.getElementById('modalProductSubTitle').textContent = product.description;
-            document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
-            document.getElementById('modalProductId').value = product.id;
+                // Update modal content
+                document.getElementById('modalProductTitle').textContent = product.name;
+                document.getElementById('modalProductSubTitle').textContent = product.description;
+                document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
+                document.getElementById('modalProductId').value = product.id;
 
                 // Handle images for the carousel
                 const carouselInner = document.getElementById('carouselInner');
@@ -220,44 +223,44 @@ function showProductDetail(productId) {
                     carouselInner.appendChild(item);
                 });
 
-            // Handle colors
-            const colorContainer = document.getElementById('colorPickerContainer');
-            const colorSection = document.getElementById('colorOptions');
-            colorContainer.innerHTML = '';
+                // Handle colors
+                const colorContainer = document.getElementById('colorPickerContainer');
+                const colorSection = document.getElementById('colorOptions');
+                colorContainer.innerHTML = '';
 
-            let colors = [];
-            if (typeof product.colors === 'string') {
-                try {
-                    colors = JSON.parse(product.colors);
-                } catch (e) {
-                    console.error('Error parsing colors JSON:', e);
+                let colors = [];
+                if (typeof product.colors === 'string') {
+                    try {
+                        colors = JSON.parse(product.colors);
+                    } catch (e) {
+                        console.error('Error parsing colors JSON:', e);
+                    }
+                } else if (Array.isArray(product.colors)) {
+                    colors = product.colors;
                 }
-            } else if (Array.isArray(product.colors)) {
-                colors = product.colors;
-            }
 
-            if (colors.length > 0) {
-                colorSection.style.display = 'block';
-                colors.forEach(color => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'border rounded-circle p-2';
-                    btn.style.backgroundColor = color;
-                    btn.style.width = '30px';
-                    btn.style.height = '30px';
-                    btn.onclick = () => {
-                        document.getElementById('selected_color').value = color;
-                        [...colorContainer.children].forEach(c => c.classList.remove('border-primary'));
-                        btn.classList.add('border-primary');
-                    };
-                    colorContainer.appendChild(btn);
-                });
-            } else {
-                colorSection.style.display = 'none';
-            }
-        })
-        .catch(error => console.error('Error fetching product:', error));
-}
+                if (colors.length > 0) {
+                    colorSection.style.display = 'block';
+                    colors.forEach(color => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'border rounded-circle p-2';
+                        btn.style.backgroundColor = color;
+                        btn.style.width = '30px';
+                        btn.style.height = '30px';
+                        btn.onclick = () => {
+                            document.getElementById('selected_color').value = color;
+                            [...colorContainer.children].forEach(c => c.classList.remove('border-primary'));
+                            btn.classList.add('border-primary');
+                        };
+                        colorContainer.appendChild(btn);
+                    });
+                } else {
+                    colorSection.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching product:', error));
+    }
 </script>
 
 @endsection

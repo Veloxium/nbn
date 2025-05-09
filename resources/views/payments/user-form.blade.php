@@ -9,9 +9,6 @@
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
-    <a href="{{ route('payments.credit', ['id' => 1]) }}">test</a>
-
     <form action="{{ route('payments.userformstore') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
@@ -30,7 +27,10 @@
             <label class="form-label">Address</label>
             <textarea name="address" class="form-control" required>{{ old('address') }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Payment</button>
+        <div class="d-flex justify-content-between align-items-center">
+            <button type="button" class="btn btn-secondary px-5" onclick="window.history.back()">Back</button>
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit Payment</button>
+        </div>
     </form>
 </div>
 @endsection

@@ -1,7 +1,14 @@
 @extends('layouts.admin')
 @section('content')
 <div class="container mt-5 mb-5">
-    <a href="{{ route('admin.products.index') }}" class=" btn btn-md btn-primary px-5">BACK</a>
+    <div>
+        <a href="{{ route('admin.products.index') }}" class="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 text-decoration-none fw-bold" style="width: min-content;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            BACK
+        </a>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow-sm rounded">
@@ -15,7 +22,7 @@
                             <div class="w-100 border mb-2">
                                 <img id="preview-image" src="{{ asset('storage/products/' . $product->image) }}" alt="Product Image" class="img-fluid" style="width: 100%; height: 100px; object-fit: cover; margin-bottom: 10px;">
                             </div>
-                            <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
+                            <input type="file" class="mt-2 form-control @error('image') is-invalid @enderror" name="image" id="image">
 
                             <!-- error message untuk image -->
                             @error('image')
@@ -27,7 +34,7 @@
 
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">TITLE</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->name) }}" placeholder="Masukkan Judul Product">
+                            <input type="text" class="mt-2 form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->name) }}" placeholder="Masukkan Judul Product">
 
                             <!-- error message untuk title -->
                             @error('name')
@@ -39,7 +46,7 @@
 
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">DESCRIPTION</label>
-                            <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="5" placeholder="Masukkan Description Product">{{ old('description', $product->description) }}</textarea>
+                            <textarea class="mt-2 form-control @error('description') is-invalid @enderror" name="description" rows="5" placeholder="Masukkan Description Product">{{ old('description', $product->description) }}</textarea>
 
                             <!-- error message untuk description -->
                             @error('description')
@@ -127,9 +134,10 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-md btn-primary me-3">UPDATE</button>
-                        <button type="reset" class="btn btn-md btn-warning">RESET</button>
-
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <button type="reset" class="btn btn-md btn-warning px-5">Reset</button>
+                            <button type="submit" class="btn btn-md btn-primary me-3 px-5">Update Product</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -137,7 +145,7 @@
     </div>
 </div>
 
-<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.25.1/standard/ckeditor.js"></script>
 <script>
     CKEDITOR.replace('description');
 </script>
