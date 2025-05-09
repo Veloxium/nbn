@@ -62,10 +62,10 @@
                 <!-- Navbar Menu Items (Center Alignment for Home, Products, Cart) -->
                 <ul class="navbar-nav center-nav">
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('user.homepage') }}">Home</a>
+                        <a class="nav-link @if(request()->routeIs('user.homepage')) active @endif" href="{{ route('user.homepage') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('home')) active @endif" href="{{ route('user.homepage') }}#new-products">Products</a>
+                        <a class="nav-link @if(request()->routeIs('user.homepage')) active @endif" href="{{ route('user.homepage') }}#new-products">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('payment.create')) active @endif" href="{{ route('payments.index') }}">Payments</a>

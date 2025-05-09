@@ -30,7 +30,7 @@
 
             @if ($payment->proof_of_payment)
             <p><strong>Proof:</strong><br>
-                <img src="{{ asset('storage/payments/' . $payment->proof_of_payment) }}" alt="Proof" width="200">
+                <img src="{{ asset('storage/' . $payment->proof_of_payment) }}" alt="Proof" width="200">
             </p>
             @else
             <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary">
