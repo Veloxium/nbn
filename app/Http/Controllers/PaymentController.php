@@ -101,6 +101,7 @@ class PaymentController extends Controller
         }
 
         Cart::where('user_id', $user)->delete();
+        Product::whereIn('id', $cartItems->pluck('product_id'))->decrement('stock', $cartItems->sum('quantity'));
 
         return redirect()->route('payments.credit', $payment->id);
     }

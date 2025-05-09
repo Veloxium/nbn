@@ -13,41 +13,81 @@
     @foreach ($payments as $payment)
     <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title">Payment #{{ $payment->id }}</h5>
-            <p><strong>Name:</strong> {{ $payment->name }}</p>
-            <p><strong>Address:</strong> {{ $payment->address }}</p>
-            <p><strong>Phone:</strong> {{ $payment->phone }}</p>
-            <p><strong>Status:</strong> {{ ucfirst($payment->status) }}</p>
-            <p><strong>Amount:</strong> Rp{{ number_format($payment->amount, 0, ',', '.') }}</p>
-
-            @if (ucfirst($payment->status) === 'Pending')
-            <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-primary">
-            Complete Your Payment
-            <a/>
-            @else
-            <p>Payment Completed</p>
-            @endif
-
-            @if ($payment->proof_of_payment)
-            <p><strong>Proof:</strong><br>
-                <img src="{{ asset('storage/' . $payment->proof_of_payment) }}" alt="Proof" width="200">
-            </p>
-            @else
-            <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary">
-                Upload Proof of Payment
-            </a>
-            @endif
-
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Payment #{{ $payment->id }}</h5>
+                <span class="badge bg-primary fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+            </div>
+            <div class="row mb-3 g-4">
+                <div class="col-md-4 col-12 mt-2">
+                    @if ($payment->proof_of_payment)
+                    <div style="width: 100%; height: 200px; overflow: hidden; margin-top: 20px; border-radius: 8px;">
+                        <img src="{{ asset('storage/' . $payment->proof_of_payment) }}" alt="Proof" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    @else
+                    <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 200px; overflow: hidden; margin-top: 20px; border-radius: 8px;; background-color: #D9D9D9;">
+                        <p class="text-center text-muted mb-0">No proof of payment uploaded</p>
+                    </div>
+                    <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary mt-4">
+                        Upload Proof of Payment
+                    </a>
+                    @endif
+                    @if (ucfirst($payment->status) === 'Pending')
+                    <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-warning px-4 mt-4">
+                        Pay Now
+                    </a>
+                    @else
+                    <p class="mt-2">Payment Completed</p>
+                    @endif
+                </div>
+                <div class="col-md-4 col-12">
+                    <h5>Detail Payment:</h5>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ $payment->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ $payment->address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ $payment->phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{{ ucfirst($payment->status) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <td>Rp{{ number_format($payment->amount, 0, ',', '.') }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-4 col-12">
+                    <h5>Detail Product:</h5>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($payment->items as $item)
+                            <tr>
+                                <td>{{ $item->product->name }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <hr>
-            <h6>Ordered Products:</h6>
-            <ul>
-                @foreach ($payment->items as $item)
-                <li>
-                    {{ $item->product->name }} - Quantity: {{ $item->quantity }} -
-                    Price: Rp{{ number_format($item->price, 0, ',', '.') }}
-                </li>
-                @endforeach
-            </ul>
+            <p class="text-muted d-flex justify-content-end">{{ $payment->created_at->format('d M Y H:i') }}</p>
         </div>
     </div>
     @endforeach

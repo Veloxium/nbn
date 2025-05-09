@@ -3,7 +3,7 @@
 @section('title', 'Proof Page')
 
 @section('content')
-<div class="container">
+<div class="container mt-5" style="min-height: calc(100vh - 340px);">
     <h2>Upload Proof of Payment for Payment #{{ $payment->id }}</h2>
     <form action="{{ route('payments.uploadProof', $payment) }}" method="POST" enctype="multipart/form-data">
         @csrf
