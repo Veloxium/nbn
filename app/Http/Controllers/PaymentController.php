@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Payment;
+use App\Models\PaymentsProduct;
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    // Show list of payments for the authenticated user
-    public function index()
+    public function index(): View
     {
         $payments = Payment::where('user_id', Auth::id())->get();
         return view('payments.index', compact('payments'));
     }
 
-    // Show proof of payment form for a specific payment
     public function showProofForm(Payment $payment)
     {
-        // Ensure the payment belongs to the logged-in user
         if ($payment->user_id !== Auth::id()) {
             return redirect()->route('payments.index');
         }
@@ -26,7 +28,6 @@ class PaymentController extends Controller
         return view('payments.proof', compact('payment'));
     }
 
-    // Handle proof of payment upload
     public function uploadProof(Request $request, Payment $payment)
     {
         $request->validate([
@@ -42,21 +43,65 @@ class PaymentController extends Controller
         return redirect()->route('payments.index')->with('success', 'Proof of payment uploaded successfully!');
     }
 
-    public function userform()
+    public function userform(): View
     {
-        return view('payments.userform');
+        return view('payments.user-form');
     }
+
+
+
+    public function credit($id): View
+    {
+        $payment = Payment::with('items.product')->findOrFail($id);
+        return view('payments.credit-card', compact('payment'));
+    }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:15',
-            'address' => 'required|string|max:255',
+            'name' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'postal_code' => 'required'
         ]);
 
+        $user = Auth::id();
+        $cartItems = Cart::where('user_id', $user)->get();
 
-        return redirect()->route('payments.index')->with('success', 'User information saved successfully!');
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Cart is empty.');
+        }
+
+        $totalAmount = 0;
+
+        foreach ($cartItems as $item) {
+            $totalAmount += $item->quantity * $item->product->price;
+        }
+
+        $payment = Payment::create([
+            'user_id' => $user,
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'postal_code' => $request->postal_code,
+            'amount' => $totalAmount,
+            'status' => 'pending',
+        ]);
+
+        foreach ($cartItems as $item) {
+            PaymentsProduct::create([
+                'payment_id' => $payment->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+                'color' => $item->color,
+                'total' => $totalAmount
+            ]);
+        }
+
+        Cart::where('user_id', $user)->delete();
+
+        return redirect()->route('payments.credit', $payment->id);
     }
 }
