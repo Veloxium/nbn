@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('/app.css') }}" rel="stylesheet">
 
     <title>{{ config('app.name', 'Laravel') }} - Admin</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js']) <!-- Menyertakan asset yang diperlukan -->

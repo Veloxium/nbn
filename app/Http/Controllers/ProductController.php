@@ -42,20 +42,25 @@ class ProductController extends Controller
             'description'   => 'required|min:10',
             'price'         => 'required|numeric',
             'stock'         => 'required|numeric',
-            'image'         => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'image'         => 'required|image|mimes:jpeg,jpg,png,webp|max:2048',
             'colors'       => 'nullable|array',
             'colors.*'     => 'string|max:50'
         ]);
 
-        $image = $request->file('image');
-        $image->storeAs('products', $image->hashName());
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->hashName();
+            $request->file('image')->storeAs('products', $data['image'], 'public');
+            if (isset($product) && $product->image) {
+                Storage::disk('public')->delete('products/' . $product->image);
+            }
+        }
 
         Product::create([
             'name'         => $request->name,
             'description'   => $request->description,
             'price'         => $request->price,
             'stock'         => $request->stock,
-            'image'         => $image->hashName(),
+            'image'         => $data['image'],
             'colors'      => json_encode($request->colors) // simpan sebagai JSON
         ]);
 
@@ -68,7 +73,7 @@ class ProductController extends Controller
     public function edit(string $id): View
     {
         $product = Product::findOrFail($id);
-        $product->colors = $product->colors ? json_decode($product->colors, true) : [];
+        $product->colors = is_string($product->colors) ? json_decode($product->colors, true) : ($product->colors ?? []);
 
         return view('admin.products.edit', compact('product'));
     }
@@ -81,7 +86,7 @@ class ProductController extends Controller
             'description'  => 'required|min:10',
             'price'        => 'required|numeric',
             'stock'        => 'required|numeric',
-            'image'        => 'image|mimes:jpeg,jpg,png|max:2048'
+            'image'        => 'image|mimes:jpeg,jpg,png,webp|max:2048'
         ]);
     
         $product = Product::findOrFail($id);
@@ -95,14 +100,12 @@ class ProductController extends Controller
         ];
     
         if ($request->hasFile('image')) {
-            Storage::delete('products/' . $product->image);
-    
-            $image = $request->file('image');
-            $image->storeAs('products', $image->hashName());
-    
-            $data['image'] = $image->hashName();
+            $data['image'] = $request->file('image')->hashName();
+            $request->file('image')->storeAs('products', $data['image'], 'public');
+            if ($product->image) {
+            Storage::disk('public')->delete('products/' . $product->image);
+            }
         }
-    
         $product->update($data);
     
         return redirect()->route('admin.products.index')->with(['success' => 'Data Berhasil Diupdate!']);

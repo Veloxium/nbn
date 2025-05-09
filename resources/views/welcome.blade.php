@@ -27,7 +27,7 @@
                         @if (Route::has('login'))
                             <div class="d-flex justify-content-between mb-3">
                                 @auth
-                                    <a href="{{ route('home') }}" class="btn btn-primary">{{ __('Home') }}</a>
+                                    <a href="{{ route('user.homepage') }}" class="btn btn-primary">{{ __('Home') }}</a>
 
                                     <!-- Tombol Logout -->
                                     <form method="GET" action="{{ route('logout') }}" style="display: inline;">
