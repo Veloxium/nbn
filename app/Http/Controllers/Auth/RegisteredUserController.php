@@ -17,7 +17,7 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create()
+    public function create() : View
     {
         return view('auth.register');
     }
@@ -25,7 +25,7 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
     {
         // Validasi input pengguna
     $validated = $request->validate([
@@ -50,6 +50,6 @@ class RegisteredUserController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    return redirect()->route('home');
+    return redirect()->route('user.homepage');
     }
 }

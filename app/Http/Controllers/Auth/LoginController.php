@@ -20,7 +20,7 @@ class LoginController extends Controller
 
             return Auth::user()->role === 'admin'
                 ? redirect()->route('admin.dashboard')
-                : redirect()->route('user.landing');
+                : redirect()->route('user.homepage');
         }
 
         return back()->withErrors([

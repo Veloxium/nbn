@@ -24,7 +24,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Request $request)
+    public function store(Request $request) : RedirectResponse
 {
     $request->validate([
         'email' => 'required|email',
@@ -42,7 +42,7 @@ if (Auth::attempt($request->only('email', 'password'))) {
     }
 
     // Jika user biasa, arahkan ke halaman user
-    return redirect()->route('home');
+    return redirect()->route('user.homepage');
 }
 
 // Jika login gagal
