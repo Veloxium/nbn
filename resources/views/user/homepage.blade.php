@@ -33,10 +33,12 @@
         <div class="row mt-4">
             @foreach ($newProducts as $product)
             <div class="col-md-3 mb-4">
-                <div class="card" data-bs-toggle="modal" data-bs-target="#productDetailModal"
+                <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productDetailModal"
                     data-product-id="{{ $product->id }}">
-                    <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top img-fluid"
-                        alt="product-image">
+                    <div style="height: 200px;">
+                        <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
+                            alt="product-image">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>
@@ -79,7 +81,7 @@
             @else
             @foreach ($allProducts as $product)
             <div class="col-md-3 mb-4">
-                <div class="card"
+                <div class="card h-100"
                     data-bs-toggle="modal"
                     data-bs-target="#productDetailModal"
                     data-product-id="{{ $product->id }}"
@@ -89,7 +91,10 @@
                     data-product-image="{{ asset('/storage/products/' . $product->image) }}"
                     data-product-full-description="{{ $product->full_description ?? 'No full description available' }}"
                     data-product-colors="{{ json_encode($product->colors) }}">
-                    <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" alt="product-image">
+                    <div style="height: 200px;">
+                        <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
+                            alt="product-image">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>
@@ -198,16 +203,22 @@ function showProductDetail(productId) {
             document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
             document.getElementById('modalProductId').value = product.id;
 
-            // Handle images for the carousel
-            const carouselInner = document.getElementById('carouselInner');
-            carouselInner.innerHTML = ''; // Clear existing images
-            const images = Array.isArray(product.images) ? product.images : [product.image];
-            images.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = 'carousel-item' + (index === 0 ? ' active' : '');
-                item.innerHTML = `<img src="/storage/products/${img}" class="d-block w-100" alt="product-image">`;
-                carouselInner.appendChild(item);
-            });
+                // Handle images for the carousel
+                const carouselInner = document.getElementById('carouselInner');
+                carouselInner.innerHTML = ''; // Clear existing images
+                const images = Array.isArray(product.images) ? product.images : [product.image, `default.png`];
+                images.forEach((img, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'carousel-item' + (index === 0 ? ' active' : '');
+                    item.innerHTML = `
+                        <div style="height: 330px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;">
+                            <img src="/storage/products/${img}" 
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;padding: 10px;" 
+                            alt="product-image">
+                        </div>
+                        `;
+                    carouselInner.appendChild(item);
+                });
 
             // Handle colors
             const colorContainer = document.getElementById('colorPickerContainer');
