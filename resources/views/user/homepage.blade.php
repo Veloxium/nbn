@@ -185,56 +185,68 @@
         });
     });
 
-    function showProductDetail(productId) {
-        // Fetch product details from the backend
-        fetch(`/product/${productId}`)
-            .then(response => response.json())
-            .then(product => {
-                console.log('Fetched product:', product);
+function showProductDetail(productId) {
+    // Fetch product details from the backend
+    fetch(`/product/${productId}`)
+        .then(response => response.json())
+        .then(product => {
+            console.log('Fetched product:', product);
 
-                // Update modal content
-                document.getElementById('modalProductTitle').textContent = product.name;
-                document.getElementById('modalProductSubTitle').innerHTML = product.description;
-                document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
-                document.getElementById('modalProductId').value = product.id;
+            // Update modal content
+            document.getElementById('modalProductTitle').textContent = product.name;
+            document.getElementById('modalProductSubTitle').textContent = product.description;
+            document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
+            document.getElementById('modalProductId').value = product.id;
 
-                // Handle images for the carousel
-                const carouselInner = document.getElementById('carouselInner');
-                carouselInner.innerHTML = ''; // Clear existing images
-                const images = Array.isArray(product.images) ? product.images : [product.image];
-                images.forEach((img, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'carousel-item' + (index === 0 ? ' active' : '');
-                    item.innerHTML = `<img src="/storage/products/${img}" class="d-block w-100" alt="product-image">`;
-                    carouselInner.appendChild(item);
-                });
+            // Handle images for the carousel
+            const carouselInner = document.getElementById('carouselInner');
+            carouselInner.innerHTML = ''; // Clear existing images
+            const images = Array.isArray(product.images) ? product.images : [product.image];
+            images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'carousel-item' + (index === 0 ? ' active' : '');
+                item.innerHTML = `<img src="/storage/products/${img}" class="d-block w-100" alt="product-image">`;
+                carouselInner.appendChild(item);
+            });
 
-                // Handle colors
-                const colorContainer = document.getElementById('colorPickerContainer');
-                const colorSection = document.getElementById('colorOptions');
-                colorContainer.innerHTML = '';
-                if (product.colors && product.colors.length > 0) {
-                    colorSection.style.display = 'block';
-                    product.colors.forEach(color => {
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = 'border rounded-circle p-2';
-                        btn.style.backgroundColor = color;
-                        btn.style.width = '30px';
-                        btn.style.height = '30px';
-                        btn.onclick = () => {
-                            document.getElementById('selected_color').value = color;
-                            [...colorContainer.children].forEach(c => c.classList.remove('border-primary'));
-                            btn.classList.add('border-primary');
-                        };
-                        colorContainer.appendChild(btn);
-                    });
-                } else {
-                    colorSection.style.display = 'none';
+            // Handle colors
+            const colorContainer = document.getElementById('colorPickerContainer');
+            const colorSection = document.getElementById('colorOptions');
+            colorContainer.innerHTML = '';
+
+            let colors = [];
+            if (typeof product.colors === 'string') {
+                try {
+                    colors = JSON.parse(product.colors);
+                } catch (e) {
+                    console.error('Error parsing colors JSON:', e);
                 }
-            })
-            .catch(error => console.error('Error fetching product:', error));
-    }
+            } else if (Array.isArray(product.colors)) {
+                colors = product.colors;
+            }
+
+            if (colors.length > 0) {
+                colorSection.style.display = 'block';
+                colors.forEach(color => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'border rounded-circle p-2';
+                    btn.style.backgroundColor = color;
+                    btn.style.width = '30px';
+                    btn.style.height = '30px';
+                    btn.onclick = () => {
+                        document.getElementById('selected_color').value = color;
+                        [...colorContainer.children].forEach(c => c.classList.remove('border-primary'));
+                        btn.classList.add('border-primary');
+                    };
+                    colorContainer.appendChild(btn);
+                });
+            } else {
+                colorSection.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching product:', error));
+}
 </script>
 
 @endsection

@@ -20,9 +20,17 @@
             <p><strong>Status:</strong> {{ ucfirst($payment->status) }}</p>
             <p><strong>Amount:</strong> Rp{{ number_format($payment->amount, 0, ',', '.') }}</p>
 
+            @if (ucfirst($payment->status) === 'Pending')
+            <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-primary">
+            Complete Your Payment
+            <a/>
+            @else
+            <p>Payment Completed</p>
+            @endif
+
             @if ($payment->proof_of_payment)
             <p><strong>Proof:</strong><br>
-                <img src="{{ asset('storage/' . $payment->proof_of_payment) }}" alt="Proof" width="200">
+                <img src="{{ asset('storage/payments/' . $payment->proof_of_payment) }}" alt="Proof" width="200">
             </p>
             @else
             <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary">

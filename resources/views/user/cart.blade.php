@@ -14,7 +14,7 @@
         @foreach ($cartItems as $item)
         <div class="card  mb-3" style="border: none;border-radius:0px;  border-bottom: 2px solid #000;">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <img src="{{ asset('images/' . $item->product->image) }}" alt="product-image"
+                <img src="{{ asset('/storage/products/' . $item->product->image) }}" alt="product-image"
                     style="height: 226px; object-fit: cover;">
                 <div class="flex-grow-1 ms-4">
                     <h5 class="card-title fs-2 mb-0">{{ $item->product->name }}</h5>
@@ -95,7 +95,7 @@
                     }) * 1.1, 0, ',', '.') }}
                 </p>
                 <div class="p-4">
-                    <a href="{{ route('userform') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>
+                    <a href="{{ route('payments.userform') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>
                 </div>
             </div>
         </div>

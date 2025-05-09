@@ -10,7 +10,9 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <form action="{{ route('payments.store') }}" method="POST" enctype="multipart/form-data">
+    <a href="{{ route('payments.credit', ['id' => 1]) }}">test</a>
+
+    <form action="{{ route('payments.userformstore') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label class="form-label">Name</label>
