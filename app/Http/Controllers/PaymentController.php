@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Payment;
 use App\Models\PaymentsProduct;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,59 @@ use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
+
+
+public function update(Request $request, $id): RedirectResponse
+{
+    // Hanya admin yang boleh update
+    if (Auth::user()->role !== 'admin') {
+        abort(403, 'Unauthorized');
+    }
+
+    $request->validate([
+        'status' => 'required|in:pending,completed,failed', // sesuaikan opsi status
+    ]);
+
+    $payment = Payment::findOrFail($id);
+    $payment->status = $request->status;
+    if ($request->status === 'completed') {
+        $payment->paid_at = Carbon::now();
+    } else {
+        $payment->paid_at = null; // Kosongkan jika bukan completed
+    }
+    $payment->save();
+
+    return redirect()->route('admin.payments.index')
+        ->with('success', 'Payment status updated successfully.');
+}
+
+    public function show(string $id): View
+    {
+        //get product by ID
+        $payment = Payment::with('items.product')->findOrFail($id);
+        // Atau berdasarkan prefix/route name
+        return view('admin.proof.show', compact('payment'));
+    }
+
+public function edit($id): View
+{
+    if (Auth::user()->role !== 'admin') {
+        abort(403, 'Unauthorized');
+    }
+
+    $payment = Payment::findOrFail($id);
+    return view('admin.proof.edit', compact('payment'));
+}
+
+
     public function index(): View
     {
+        if (Auth::user()->role === 'admin') {
+            // Jika admin, arahkan ke payemt manage admin
+            $payments = Payment::get();
+            return view('admin.proof.index', compact('payments'));
+        }
+
         $payments = Payment::where('user_id', Auth::id())->get();
         return view('payments.index', compact('payments'));
     }
@@ -47,7 +99,6 @@ class PaymentController extends Controller
     {
         return view('payments.user-form');
     }
-
 
 
     public function credit($id): View
