@@ -22,13 +22,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Hai Selamat Melakukan Pengembangan TA, Semoga Lancar Aamiin') }}</div>
-
                     <div class="card-body">
                         @if (Route::has('login'))
                             <div class="d-flex justify-content-between mb-3">
                                 @auth
-                                    <a href="{{ route('user.homepage') }}" class="btn btn-primary">{{ __('Home') }}</a>
-
+                                        @if (Auth::user()->role === 'admin')
+                                            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">{{ __('Dashboard') }}</a>
+                                            @else
+                                            <a href="{{ route('user.homepage') }}" class="btn btn-primary">{{ __('Homepage') }}</a>
+                                            @endif
                                     <!-- Tombol Logout -->
                                     <form method="GET" action="{{ route('logout') }}" style="display: inline;">
                                         @csrf
