@@ -67,6 +67,73 @@
             </div>
         </div>
     </div>
-
+    <div class="row mt-4">
+        <div class="card col-6">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    Monthly Orders
+                </h5>
+            </div>
+            <div class="card-body py-3">
+                <canvas id="chartjs-line" style="display: block; height: 252px; width: 428px;" width="856" height="504" class="chart-line chartjs-render-monitor"></canvas>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    Recent Payments
+                </div>
+                <div class="card-body">
+                    <p>No recent payments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Recent Products
+                </div>
+                <div class="card-body">
+                    <p>No recent products.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    new Chart(document.getElementById("chartjs-line"), {
+        type: "line",
+        data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            datasets: [{
+                label: "Orders (Rp)",
+                fill: true,
+                backgroundColor: "transparent",
+                borderColor: window.theme.primary,
+                data: [0, 15, 30, 25, 29, 11, 40, 54, 34, 46, 59, ]
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    reverse: true,
+                    gridLines: {
+                        color: "rgba(0,0,0,0.05)"
+                    }
+                }],
+                yAxes: [{
+                    borderDash: [5, 5],
+                    gridLines: {
+                        color: "rgba(0,0,0,0)",
+                        fontColor: "#fff"
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
 @endsection
