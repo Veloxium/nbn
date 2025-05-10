@@ -16,7 +16,7 @@ class AdminController extends Controller
         Log::info('Admin dashboard accessed.');
         $userCount = User::count();
         $productCount = Product::count();
-        $latestProducts = Product::latest()->take(5)->get();
+        $latestProducts = Product::latest()->take(8)->get();
         $latestPayments = Payment::latest()->take(5)->get();
 
         // Ambil total pembayaran bulanan (group by bulan)
