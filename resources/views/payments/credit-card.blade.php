@@ -14,9 +14,9 @@
             <div class="card-body">
                 <div class="mb-3 text-center">
                     <h3>Transfer <span class="fw-bold">Rp. {{ number_format($payment->amount, 0, ',', '.') }}</span> To:</h3>
-                    <h5 class="mb-1">Account Number: <strong>1234567890</strong></h5>
-                    <p class="mb-1">Account Name: <strong>NBN Store</strong></p>
-                    <p class="mb-1">Bank: <strong>BRI</strong></p>
+                    <h5 class="mb-1">Account Number: <strong>{{ env('BANK_ACCOUNT_NUMBER') }}</strong></h5>
+                    <p class="mb-1">Account Name: <strong>{{ env('BANK_ACCOUNT_NAME') }}</strong></p>
+                    <p class="mb-1">Bank: <strong>{{ env('BANK_NAME') }}</strong></p>
                 </div>
 
                 <hr>
