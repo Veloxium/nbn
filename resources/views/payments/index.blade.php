@@ -15,7 +15,13 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Payment #{{ $payment->id }}</h5>
+ @if ($payment->status === 'pending')
                 <span class="badge bg-primary fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @elseif ($payment->status === 'completed')
+                <span class="badge bg-success fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @elseif ($payment->status === 'failed')
+                <span class="badge bg-danger fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @endif
             </div>
             <div class="row mb-3 g-4">
                 <div class="col-md-4 col-12 mt-2">
