@@ -184,42 +184,48 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Listen for clicks on any product card
         document.querySelectorAll('.card[data-product-id]').forEach(card => {
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function () {
                 const productId = this.getAttribute('data-product-id');
                 showProductDetail(productId);
             });
         });
+
+        // Prevent submit if color is required but not selected
+        document.getElementById('addToCartForm').addEventListener('submit', function (e) {
+            const colorSection = document.getElementById('colorOptions');
+            const selectedColor = document.getElementById('selected_color').value;
+
+            if (colorSection.style.display !== 'none' && !selectedColor) {
+                e.preventDefault();
+                alert('Please select a color before adding to cart.');
+            }
+        });
     });
 
     function showProductDetail(productId) {
-        // Fetch product details from the backend
         fetch(`/product/${productId}`)
             .then(response => response.json())
             .then(product => {
-                console.log('Fetched product:', product);
-
-                // Update modal content
                 document.getElementById('modalProductTitle').textContent = product.name;
                 document.getElementById('modalProductSubTitle').textContent = product.description;
                 document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
                 document.getElementById('modalProductId').value = product.id;
+                document.getElementById('selected_color').value = ''; // reset previous selection
 
-                // Handle images for the carousel
+                // Carousel logic
                 const carouselInner = document.getElementById('carouselInner');
-                carouselInner.innerHTML = ''; // Clear existing images
-                const images = Array.isArray(product.images) ? product.images : [product.image, `default.png`];
+                carouselInner.innerHTML = '';
+                const images = Array.isArray(product.images) ? product.images : [product.image];
                 images.forEach((img, index) => {
                     const item = document.createElement('div');
                     item.className = 'carousel-item' + (index === 0 ? ' active' : '');
                     item.innerHTML = `
                         <div style="height: 330px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;">
-                            <img src="/storage/products/${img}" 
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;padding: 10px;" 
+                            <img src="/storage/products/${img}"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;padding: 10px;"
                             alt="product-image">
-                        </div>
-                        `;
+                        </div>`;
                     carouselInner.appendChild(item);
                 });
 

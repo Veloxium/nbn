@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
                         Proof of Payment
                     </a>
                 </li>
@@ -45,6 +45,8 @@
                 <a class="ms-auto nav-link dropdown-toggle" href="#" id="mobileUserDropdown" role="button" data-bs-toggle="dropdown">
                     {{ Auth::user()->name }}
                 </a>
+
+                        <a class="dropdown-item" href="{{ route('logout') }}">{{ __('Log Out') }}</a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     {{-- <li><a class="ms-auto dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li> --}}
                     <li>

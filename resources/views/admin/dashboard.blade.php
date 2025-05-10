@@ -78,16 +78,37 @@
                 <canvas id="chartjs-line" style="display: block; height: 252px; width: 428px;" width="856" height="504" class="chart-line chartjs-render-monitor"></canvas>
             </div>
         </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">
-                    Recent Payments
-                </div>
-                <div class="card-body">
-                    <p>No recent payments.</p>
-                </div>
-            </div>
+
+
+<div class="col-6">
+    <div class="card">
+        <div class="card-header">
+            Recent Payments
         </div>
+        <div class="row g-3 p-3">
+            @foreach ($latestPayments as $payment)
+                <div class="col-md-4">
+                    <div class="card-body border rounded shadow-sm">
+                        <div class=" align-items-center">
+                            <h5 class="card-title">Payment #{{ $payment->id }}</h5>
+                                            @if ($payment->status === 'pending')
+                <span class="badge bg-primary fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @elseif ($payment->status === 'completed')
+                <span class="badge bg-success fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @elseif ($payment->status === 'failed')
+                <span class="badge bg-danger fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
+                @endif
+                        </div>
+                        <hr>
+                        <p class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+
     </div>
     <div class="row mt-4">
         <div class="col-12">
@@ -96,44 +117,99 @@
                     Recent Products
                 </div>
                 <div class="card-body">
+                    @if ($latestProducts->isEmpty())
+
                     <p>No recent products.</p>
+                    @endif
+    <div class="container text-center">
+        <div class="row mt-4">
+            @foreach ($latestProducts as $product)
+            <div class="col-md-3 mb-4" style="{{ $product->stock === 0 ? 'display: none;' : '' }}">
+                <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productDetailModal"
+                    data-product-id="{{ $product->id }}">
+                    <div style="height: 200px;">
+                        <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
+                            alt="product-image">
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-end">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>
+                        <p class="card-text fs-5 fw-bold mb-0">{{ 'Rp. ' . number_format($product->price, 0, ',', '.') }}</p>
+                        <p class="card-text"><small class="text-muted">Stock: {{ $product->stock }}</small></p>
+                        <div class="d-flex align-items-center">
+                            @php
+                            $colors = is_array($product->colors)
+                            ? $product->colors
+                            : json_decode($product->colors, true);
+                            @endphp
+
+                            @if ($colors)
+                            @foreach ($colors as $color)
+                            <span
+                                style="display:inline-block;width:20px;height:20px;background:{{ $color }};border-radius:50%;margin-right:5px;"></span>
+                            @endforeach
+                            @else
+                            <span class="text-muted">Tidak ada warna</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-    new Chart(document.getElementById("chartjs-line"), {
-        type: "line",
+    const ctx = document.getElementById('chartjs-line')
+    const paymentsChart = new Chart(ctx, {
+        type: 'line',
         data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            labels: {!! json_encode(array_map(fn($m) => \Carbon\Carbon::create()->month($m)->format('F'), array_keys($monthlyPayments))) !!},
             datasets: [{
-                label: "Orders (Rp)",
-                fill: true,
-                backgroundColor: "transparent",
-                borderColor: window.theme.primary,
-                data: [0, 15, 30, 25, 29, 11, 40, 54, 34, 46, 59, ]
+                label: 'Payments (in IDR)',
+                data: {!! json_encode(array_values($monthlyPayments)) !!},
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
             }]
         },
         options: {
+            responsive: true,
             scales: {
-                xAxes: [{
+                x: {
                     reverse: true,
-                    gridLines: {
-                        color: "rgba(0,0,0,0.05)"
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    },
+                    ticks: {
+                        color: '#000'
                     }
-                }],
-                yAxes: [{
-                    borderDash: [5, 5],
-                    gridLines: {
-                        color: "rgba(0,0,0,0)",
-                        fontColor: "#fff"
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0)',
+                        borderDash: [5, 5]
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return 'Rp ' + new Intl.NumberFormat().format(value);
+                        },
+                        color: '#000'
                     }
-                }]
+                }
             }
         }
     });
-</script>
+    </script>
+
 
 @endsection
