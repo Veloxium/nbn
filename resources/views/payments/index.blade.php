@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Payment #{{ $payment->id }}</h5>
- @if ($payment->status === 'pending')
+                @if ($payment->status === 'pending')
                 <span class="badge bg-primary fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
                 @elseif ($payment->status === 'completed')
                 <span class="badge bg-success fs-6 font-bold">{{ ucfirst($payment->status) }}</span>
@@ -33,16 +33,15 @@
                     <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 200px; overflow: hidden; margin-top: 20px; border-radius: 8px;; background-color: #D9D9D9;">
                         <p class="text-center text-muted mb-0">No proof of payment uploaded</p>
                     </div>
+                    @endif
+                    @if (ucfirst($payment->status) === 'Pending')
                     <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary mt-4">
                         Upload Proof of Payment
                     </a>
-                    @endif
-                    @if (ucfirst($payment->status) === 'Pending')
                     <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-warning px-4 mt-4">
                         Pay Now
                     </a>
-                    @else
-                    <p class="mt-2">Payment Completed</p>
+
                     @endif
                 </div>
                 <div class="col-md-4 col-12">
@@ -93,7 +92,17 @@
                 </div>
             </div>
             <hr>
-            <p class="text-muted d-flex justify-content-end">{{ $payment->created_at->format('d M Y H:i') }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                    @if (ucfirst($payment->status) === 'Failed')
+                    <strong>Your payment has expired</strong>
+                    @elseif (ucfirst($payment->status) === 'Pending')
+                    <strong>Complete and upload your proof of payment</strong>
+                    @else
+                    <strong>Your payment is successful</strong>
+                 @endif
+            <p class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</p>
+            </div>
+
         </div>
     </div>
     @endforeach
