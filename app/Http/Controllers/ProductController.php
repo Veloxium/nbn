@@ -42,16 +42,19 @@ class ProductController extends Controller
             'description'   => 'required|min:10',
             'price'         => 'required|numeric',
             'stock'         => 'required|numeric',
-            'image'         => 'required|image|mimes:jpeg,jpg,png,webp|max:2048',
+            'image'         => 'required|array',
+            'image.*'       => 'image|mimes:jpeg,jpg,png,webp|max:2048',
             'colors'       => 'nullable|array',
             'colors.*'     => 'string|max:50'
         ]);
 
+        $imagePaths = [];
+
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->hashName();
-            $request->file('image')->storeAs('products', $data['image'], 'public');
-            if (isset($product) && $product->image) {
-                Storage::disk('public')->delete('products/' . $product->image);
+            foreach ($request->file('image') as $item) {
+                $filename = $item->hashName();
+                $item->storeAs('products', $filename, 'public');
+                $imagePaths[] = $filename;
             }
         }
 
@@ -60,15 +63,12 @@ class ProductController extends Controller
             'description'   => $request->description,
             'price'         => $request->price,
             'stock'         => $request->stock,
-            'image'         => $data['image'],
+            'image'         => json_encode($imagePaths), // simpan sebagai JSON
             'colors'      => json_encode($request->colors) // simpan sebagai JSON
         ]);
 
         return redirect()->route('admin.products.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
-
-
-
 
     public function edit(string $id): View
     {
@@ -86,7 +86,8 @@ class ProductController extends Controller
             'description'  => 'required|min:10',
             'price'        => 'required|numeric',
             'stock'        => 'required|numeric',
-            'image'        => 'image|mimes:jpeg,jpg,png,webp|max:2048'
+            'image'        => 'nullable|array',
+            'image.*'      => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     
         $product = Product::findOrFail($id);
@@ -98,28 +99,54 @@ class ProductController extends Controller
             'stock'        => $request->stock,
             'colors'       => json_encode($request->colors)
         ];
-    
+
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->hashName();
-            $request->file('image')->storeAs('products', $data['image'], 'public');
+            // Delete old images from storage
             if ($product->image) {
-            Storage::disk('public')->delete('products/' . $product->image);
+                $oldImages = json_decode($product->image, true);
+                if (is_array($oldImages)) {
+                    foreach ($oldImages as $oldImage) {
+                        Storage::disk('public')->delete('products/' . $oldImage);
+                    }
+                }
             }
+
+            $newImagePaths = [];
+            foreach ($request->file('image') as $image) {
+                $filename = $image->hashName();
+                $image->storeAs('products', $filename, 'public');
+                $newImagePaths[] = $filename;
+            }
+
+            $data['image'] = json_encode($newImagePaths);
+        } else {
+            // Keep the old images if no new images are uploaded
+            $data['image'] = $product->image;
         }
         $product->update($data);
     
         return redirect()->route('admin.products.index')->with(['success' => 'Data Berhasil Diupdate!']);
     }
-    public function destroy($id): RedirectResponse
+
+    public function destroy(string $id): RedirectResponse
     {
         $product = Product::findOrFail($id);
 
-        Storage::delete('products/' . $product->image);
+        // Delete all images from storage
+        if ($product->image) {
+            $images = json_decode($product->image, true);
+            if (is_array($images)) {
+                foreach ($images as $img) {
+                    Storage::disk('public')->delete('products/' . $img);
+                }
+            }
+        }
 
         $product->delete();
 
         return redirect()->route('admin.products.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
+
     public function showPublic($id)
     {
         $product = Product::findOrFail($id);

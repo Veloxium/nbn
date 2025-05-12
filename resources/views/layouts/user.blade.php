@@ -106,7 +106,7 @@
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-light text-dark py-4 mt-5">
+    <footer class="bg-primary text-light py-4 mt-5">
         <div class="container">
             <!-- Upper Section: Left Text & Right Contact Info -->
             <div class="row">
@@ -117,9 +117,9 @@
                 <!-- Right Section: Contact Info -->
                 <div class="col-md-4 text-md-right">
                     <p>Contact Us:
-                        <a href="https://instagram.com" target="_blank" class="text-dark mx-2">Instagram</a> |
-                        <a href="https://whatsapp.com" target="_blank" class="text-dark mx-2">WhatsApp</a> |
-                        <a href="mailto:info@nbn.com" class="text-dark mx-2">Email</a>
+                        <a href="https://instagram.com" target="_blank" class="text-light mx-2">Instagram</a> |
+                        <a href="https://whatsapp.com" target="_blank" class="text-light mx-2">WhatsApp</a> |
+                        <a href="mailto:info@nbn.com" class="text-light mx-2">Email</a>
                     </p>
                 </div>
             </div>

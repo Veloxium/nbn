@@ -136,9 +136,20 @@
                         @if ($product->stock > 0)
                         <div class="col-md-3 mb-4">
                             <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productDetailModal" data-product-id="{{ $product->id }}">
-                                <div style="height: 200px;">
-                                    <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%; padding: 10px;" alt="product-image">
-                                </div>
+                                @php
+                                    $images = json_decode($product->image, true);
+                                @endphp
+                                @if(is_array($images) && count($images) > 0)
+                                    <div style="height: 300px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                                        <img src="{{ asset('/storage/products/' . $images[0]) }}"
+                                            class="img-fluid rounded"
+                                            style="width: 100%; height: 300px; object-fit: cover; background-color: #f8f9fa;" alt="product-image">
+                                    </div>
+                                @else
+                                    <div class="w-100 border pt-2 mb-0 text-center" style="width: 100%; height: 300px; object-fit: cover; background-color: #f8f9fa">
+                                        <p>No Image</p>
+                                    </div>
+                                @endif
                                 <div class="card-body d-flex flex-column justify-content-end">
                                     <h5 class="card-title fs-5">{{ $product->name }}</h5>
                                     <p class="card-text">{!! \Illuminate\Support\Str::limit($product->description, 50) !!}</p>

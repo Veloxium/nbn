@@ -35,8 +35,12 @@
             <div class="col-md-3 mb-4" style="{{ $product->stock === 0 ? 'display: none;' : '' }}">
                 <div class="card h-100" data-bs-toggle="modal" data-bs-target="#productDetailModal"
                     data-product-id="{{ $product->id }}">
-                    <div style="height: 200px;">
-                        <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
+                    @php
+                        $images = is_array($product->images) ? $product->images : (json_decode($product->image, true) ?: []);
+                        $firstImage = !empty($images) ? $images[0] : $product->image;
+                    @endphp
+                    <div style="height: 300px; width: 100%;">
+                        <img src="{{ asset('/storage/products/' . $firstImage) }}" class="card-img-top" style="object-fit: cover; height: 100%;"
                             alt="product-image">
                     </div>
                     <div class="card-body d-flex flex-column justify-content-end">
@@ -92,8 +96,12 @@
                     data-product-image="{{ asset('/storage/products/' . $product->image) }}"
                     data-product-full-description="{{ $product->full_description ?? 'No full description available' }}"
                     data-product-colors="{{ json_encode($product->colors) }}">
-                    <div style="height: 200px;">
-                        <img src="{{ asset('/storage/products/' . $product->image) }}" class="card-img-top" style="object-fit: contain; height: 100%;padding: 10px;"
+                    @php
+                        $images = is_array($product->images) ? $product->images : (json_decode($product->image, true) ?: []);
+                        $firstImage = !empty($images) ? $images[0] : $product->image;
+                    @endphp
+                    <div style="height: 300px; width: 100%;">
+                        <img src="{{ asset('/storage/products/' . $firstImage) }}" class="card-img-top" style="object-fit: cover; height: 100%;"
                             alt="product-image">
                     </div>
                     <div class="card-body d-flex flex-column justify-content-end">
@@ -216,7 +224,11 @@
                 // Carousel logic
                 const carouselInner = document.getElementById('carouselInner');
                 carouselInner.innerHTML = '';
-                const images = Array.isArray(product.images) ? product.images : [product.image];
+                const images = Array.isArray(product.images)
+                    ? product.images
+                    : (typeof product.image === 'string'
+                        ? (JSON.parse(product.image) || [product.image])
+                        : [product.image]);
                 images.forEach((img, index) => {
                     const item = document.createElement('div');
                     item.className = 'carousel-item' + (index === 0 ? ' active' : '');

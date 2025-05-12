@@ -19,9 +19,18 @@
                         @method('PUT')
                         <div class="form-group mb-3">
                             <label class="font-weight-bold">IMAGE</label>
-                            <div class="w-100 border mb-2">
-                                <img id="preview-image" src="{{ asset('storage/products/' . $product->image) }}" alt="Product Image" class="img-fluid" style="width: 100%; height: 100px; object-fit: cover; margin-bottom: 10px;">
-                            </div>
+
+                            @if($product->image)
+                                <div class="w-100 border mb-2 d-flex flex-wrap gap-2">
+                                    @foreach (json_decode($product->image, true) as $index => $img)
+                                        <img src="{{ asset('storage/products/' . $img) }}" alt="Product Image {{ $index + 1 }}" class="img-fluid" style="width: 100px; height: 100px; object-fit: cover; margin-bottom: 10px;" id="preview-image-{{ $index }}">
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="w-100 border pt-2 mb-0" style="padding-left: 10px;">
+                                    <p>No Image</p>
+                                </div>
+                            @endif
                             <input type="file" class="mt-2 form-control @error('image') is-invalid @enderror" name="image" id="image">
 
                             <!-- error message untuk image -->
