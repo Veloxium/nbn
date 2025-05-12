@@ -99,21 +99,52 @@
                                         <th>Price</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($payment->items as $item)
-                                    <tr>
-                                        <td class="text-center">
-                                            <img src="{{ asset('/storage/products/' . $item->product->image) }}"
-                                                class="img-fluid rounded"
-                                                style="width: 150px; height: 150px; object-fit: contain; background-color: #f8f9fa; padding: 5px;">
-                                        </td>
+  <tbody>
+@foreach ($payment->items as $item)
+    <tr>
+        <td class="text-center" style="width: 200px;">
+            @php
+                $images = is_array($item->product->image)
+                    ? $item->product->image
+                    : json_decode($item->product->image, true);
+            @endphp
 
-                                        <td>{{ $item->product->name }}</td>
-                                        <td>{{ $item->quantity }}</td>
-                                        <td>Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
+            @if ($images && count($images))
+                <div id="carouselItem{{ $loop->index }}" class="carousel slide" data-bs-ride="carousel" style="width:150px; height:150px; margin:auto;">
+                    <div class="carousel-inner" style="width:150px; height:150px;">
+                        @foreach ($images as $i => $img)
+                            <div class="carousel-item {{ $i === 0 ? 'active' : '' }}" style="width:150px; height:150px;">
+                                <img src="{{ asset('/storage/products/' . $img) }}"
+                                     class="d-block w-100 h-100 rounded"
+                                     style="object-fit: contain; background-color: #f8f9fa; padding: 5px;"
+                                     alt="Product image {{ $i + 1 }}">
+                            </div>
+                        @endforeach
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselItem{{ $loop->index }}" data-bs-slide="prev"
+                        style="position:absolute; top:50%; left:0; transform:translateY(-50%);">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5);"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselItem{{ $loop->index }}" data-bs-slide="next"
+                        style="position:absolute; top:50%; right:0; transform:translateY(-50%);">
+                        <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5);"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            @else
+                <img src="{{ asset('/storage/products/' . $item->product->image) }}"
+                     class="img-fluid rounded"
+                     style="width: 150px; height: 150px; object-fit: contain; background-color: #f8f9fa; padding: 5px;">
+            @endif
+        </td>
+
+        <td>{{ $item->product->name }}</td>
+        <td>{{ $item->quantity }}</td>
+        <td>Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+    </tr>
+@endforeach
+</tbody>
                             </table>
                         </div>
                     </div>
