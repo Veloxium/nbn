@@ -3,7 +3,7 @@
 @section('title', 'Your Cart')
 
 @section('content')
-<div class="container mt-5" style="min-height: calc(100vh - 400px);">
+<div class="container mt-5" style="min-height: calc(100vh - 292px);">
     <div class="row g-4">
         <div class="col-12 col-lg-8">
             <h3>Your Cart</h3>
@@ -16,8 +16,14 @@
             @foreach ($cartItems as $item)
             <div class="card mb-3 border-0 border-bottom border-dark rounded-0">
                 <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start position-relative gap-3">
-                    <img src="{{ asset('storage/products/' . $item->product->image) }}" alt="product-image"
-                        class="img-fluid" style="height: 200px; object-fit: cover; width: auto; max-width: 100%;">
+                    @php
+                        $images = is_array($item->product->images) ? $item->product->images : (json_decode($item->product->image, true) ?: []);
+                        $firstImage = !empty($images) ? $images[0] : $item->product->image;
+                    @endphp
+                    <div style="height: 200px; width: 300px;">
+                        <img src="{{ asset('/storage/products/' . $firstImage) }}" class="card-img-top" style="object-fit: cover; height: 100%;"
+                            alt="{{ $item->product->name }} in cart, color: {{ $item->selected_color ?? 'default' }}">
+                    </div>
 
                     <div class="flex-grow-1">
                         <h5 class="card-title fs-4 mb-0">{{ $item->product->name }}</h5>

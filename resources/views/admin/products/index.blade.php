@@ -30,9 +30,16 @@
                                 @forelse ($products as $product)
                                 <tr>
                                     <td class="text-center">
-                                        <img src="{{ asset('/storage/products/' . $product->image) }}"
-                                            class="img-fluid rounded"
-                                            style="width: 150px; height: 150px; object-fit: contain; background-color: #f8f9fa; padding: 5px;">
+                                        @php
+                                            $images = json_decode($product->image, true);
+                                        @endphp
+                                        @if(is_array($images) && count($images) > 0)
+                                            <img src="{{ asset('/storage/products/' . $images[0]) }}"
+                                                class="img-fluid rounded"
+                                                style="width: 150px; height: 150px; object-fit: contain; background-color: #f8f9fa; padding: 5px;">
+                                        @else
+                                            <span class="text-muted">No image</span>
+                                        @endif
                                     </td>
                                     <td>{{ $product->name }}</td>
                                     <td style="max-width: 200px;">{{ $product->description }}</td>

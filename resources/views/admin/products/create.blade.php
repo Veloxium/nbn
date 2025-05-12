@@ -16,13 +16,21 @@
             <div class="card border-0 shadow-sm rounded">
                 <div class="card-body">
                     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
-
                         @csrf
                         <div class="form-group mb-3">
+                            <div>
+                                <div class="mb-3" id="preview-images-container" style="display: none;">
+                                    <label class="font-weight-bold">Preview Images</label>
+                                    <div class="d-flex flex-wrap gap-2 mt-2" id="preview-images"></div>
+                                </div>
+                            </div>
                             <label class="font-weight-bold">IMAGE</label>
-                            <input type="file" class="mt-2 form-control @error('image') is-invalid @enderror"
-                                name="image">
-
+                            
+                            <div class="input-group mt-2">
+                                <input type="file" multiple class="form-control @error('image') is-invalid @enderror"
+                                    name="image[]" id="image-input">
+                                <button type="button" class="btn btn-outline-danger d-none" id="clear-image-btn">Clear</button>
+                            </div>
                             <!-- error message untuk image -->
                             @error('image')
                             <div class="alert alert-danger mt-2">
@@ -152,7 +160,54 @@
 
 
 <script src="https://cdn.ckeditor.com/4.25.1/standard/ckeditor.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.querySelector('input[type="file"][name="image[]"]');
+        const previewContainer = document.getElementById('preview-images-container');
+        const previewImages = document.getElementById('preview-images');
 
+        input.addEventListener('change', function () {
+            previewImages.innerHTML = '';
+            if (input.files && input.files.length > 0) {
+                previewContainer.style.display = 'block';
+                Array.from(input.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
+                        img.className = 'me-2 mb-2';
+                        previewImages.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('image-input');
+        const clearBtn = document.getElementById('clear-image-btn');
+
+        input.addEventListener('change', function () {
+            clearBtn.classList.toggle('d-none', !input.files.length);
+            });
+
+            clearBtn.addEventListener('click', function () {
+                input.value = '';
+                clearBtn.classList.add('d-none');
+                // Hide preview images as well
+                const previewContainer = document.getElementById('preview-images-container');
+                const previewImages = document.getElementById('preview-images');
+                previewImages.innerHTML = '';
+                previewContainer.style.display = 'none';
+            });
+        });
+</script>
 
 <script>
     CKEDITOR.replace('description');
