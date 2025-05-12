@@ -1,24 +1,50 @@
 @extends('layouts.admin')
 @section('content')
 <div class="container mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row align-items-stretch" style="min-height:400px;">
+        <div class="col-md-4 d-flex">
             <div class="card border-0 shadow-sm rounded">
-                <div class="card-body">
-                    <img src="{{ asset('/storage/products/' . $product->image) }}" class="rounded"
-                        style="width: 100%">
+                <div >
+                    @php
+                        $images = is_array($product->image) ? $product->image : json_decode($product->image, true);
+                    @endphp
+                    @if ($images && count($images))
+                    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" style="position: relative; height: 300px; overflow: hidden;">
+                        <div class="carousel-inner h-100">
+                            @foreach ($images as $idx => $img)
+                                <div class="carousel-item h-100 {{ $idx === 0 ? 'active' : '' }}">
+                                    <img src="{{ asset('/storage/products/' . $img) }}"
+                                         class="d-block w-100 h-100 object-fit-cover rounded mb-2"
+                                         alt="Product Image {{ $idx + 1 }}">
+                                </div>
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev"
+                            style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); z-index: 2;">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next"
+                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); z-index: 2;">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>                    
+                    @else                
+                        <span class="text-muted">No images available</span>
+                    @endif
                 </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm rounded">
+        </div>        
+        <div class="col-md-8 d-flex">
+            <div class="card border-0 shadow-sm rounded w-100">
                 <div class="card-body">
                     <h3>{{ $product->name }}</h3>
                     <hr />
                     <p>{{ 'Rp ' . number_format($product->price, 2, ',', '.') }}</p>
-                    <code>
+                    <div style="text-align: justify;">
                         <p>{!! $product->description !!}</p>
-                    </code>
+                    </div>
                     @php
                     $colors = is_array($product->colors)
                     ? $product->colors
