@@ -200,7 +200,7 @@
         });
 
         // Prevent submit if color is required but not selected
-        document.getElementById('addToCartForm').addEventListener('submit', function (e) {
+        document.querySelector('form[action="{{ route('cart.add') }}"]').addEventListener('submit', function (e) {
             const colorSection = document.getElementById('colorOptions');
             const selectedColor = document.getElementById('selected_color').value;
 
@@ -219,7 +219,6 @@
                 document.getElementById('modalProductSubTitle').textContent = product.description;
                 document.getElementById('modalProductPrice').textContent = 'Rp ' + product.price.toLocaleString('id-ID');
                 document.getElementById('modalProductId').value = product.id;
-                document.getElementById('selected_color').value = ''; // reset previous selection
 
                 // Carousel logic
                 const carouselInner = document.getElementById('carouselInner');
@@ -259,10 +258,12 @@
 
                 if (colors.length > 0) {
                     colorSection.style.display = 'block';
-                    colors.forEach(color => {
+                    // Set selected_color to first color by default
+                    document.getElementById('selected_color').value = colors[0];
+                    colors.forEach((color, idx) => {
                         const btn = document.createElement('button');
                         btn.type = 'button';
-                        btn.className = 'border rounded-circle p-2';
+                        btn.className = 'border rounded-circle p-2' + (idx === 0 ? ' border-primary' : '');
                         btn.style.backgroundColor = color;
                         btn.style.width = '30px';
                         btn.style.height = '30px';
@@ -275,6 +276,7 @@
                     });
                 } else {
                     colorSection.style.display = 'none';
+                    document.getElementById('selected_color').value = '';
                 }
             })
             .catch(error => console.error('Error fetching product:', error));

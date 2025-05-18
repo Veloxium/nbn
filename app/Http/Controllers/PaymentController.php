@@ -146,7 +146,7 @@ public function edit($id): View
                 'product_id' => $item->product_id,
                 'quantity' => $item->quantity,
                 'price' => $item->product->price,
-                'color' => $item->color,
+                'color' => $item->selected_color,
                 'total' => $totalAmount
             ]);
         }
