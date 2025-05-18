@@ -29,9 +29,9 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Payment Method</label>
-            <select name="payment_method" class="form-select" required>
+            <select name="payment_method" id="payment_method" class="form-select" required>
                 <option value="">-- Select Payment Method --</option>
-                <option value="cod" {{ old('payment_method') == 'cod' ? 'selected' : '' }}>Cash on Delivery (COD)</option>
+                <option value="cash_on_delivery" {{ old('payment_method') == 'cash_on_delivery' ? 'selected' : '' }}>Cash on Delivery (COD)</option>
                 <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
             </select>
         </div>

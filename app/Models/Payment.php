@@ -18,6 +18,9 @@ class Payment extends Model
         'address',
         'amount',
         'status',
+        'payment_method',
+        'delivery_status',
+        'no_resi',
         'proof_of_payment',
         'paid_at'
     ];

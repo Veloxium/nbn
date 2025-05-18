@@ -14,11 +14,12 @@
         <option value="completed" {{ $payment->status === 'completed' ? 'selected' : '' }}>Completed</option>
         <option value="failed" {{ $payment->status === 'failed' ? 'selected' : '' }}>Failed</option>
     </select>
-    <label for="delivery-status" style="margin-bottom: 6px">Delivery Status:</label>
-    <select name="delivery-status" id="delivery-status" class="form-select mb-2">
-        <option value="packing" {{ $payment->status === 'packing' ? 'selected' : '' }}>Packing</option>
-        <option value="delivered" {{ $payment->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
-        <option value="completed" {{ $payment->status === 'completed' ? 'selected' : '' }}>Completed</option>
+    <label for="delivery_status" style="margin-bottom: 6px">Delivery Status:</label>
+    <select name="delivery_status" id="delivery_status" class="form-select mb-2">
+        <option value="waiting" {{ $payment->delivery_status === 'waiting' ? 'selected' : '' }}>Waiting</option>
+        <option value="packaged" {{ $payment->delivery_status === 'packaged' ? 'selected' : '' }}>Packing</option>
+        <option value="shipped" {{ $payment->delivery_status === 'shipped' ? 'selected' : '' }}>Shipped</option>
+        <option value="delivered" {{ $payment->delivery_status === 'delivered' ? 'selected' : '' }}>Delivered</option>
     </select>
     <label for="no_resi" style="margin-bottom: 6px">No Resi:</label>
     <input type="text" name="no_resi" id="no_resi" class="form-control mb-2" value="{{ old('no_resi', $payment->no_resi ?? '') }}">

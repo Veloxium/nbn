@@ -31,7 +31,11 @@
                     </div>
                     @else
                     <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 200px; overflow: hidden; margin-top: 20px; border-radius: 8px;; background-color: #D9D9D9;">
+                    @if ($payment->payment_method === 'bank_transfer')
                         <p class="text-center text-muted mb-0">No proof of payment uploaded</p>
+                    @else
+                        <p class="text-center text-muted mb-0">No proof of receipt of the product uploaded</p>
+                    @endif
                     </div>
                     @endif
                     @if (ucfirst($payment->status) === 'Pending')
@@ -41,7 +45,17 @@
                     <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-warning px-4 mt-4">
                         Pay Now
                     </a>
+                    @else
+                    @if ($payment->payment_method === 'bank_transfer')
+                    <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-primary mt-4">
+                        Detail
+                    </a>
+                    @else
+                    <a href="{{ route('payments.cod', $payment->id) }}" class="btn btn-sm btn-primary mt-4">
+                        Detail
+                    </a>
 
+                    @endif
                     @endif
                 </div>
                 <div class="col-md-4 col-12">
@@ -60,8 +74,16 @@
                             <td>{{ $payment->phone }}</td>
                         </tr>
                         <tr>
-                            <th>Status</th>
+                            <th>Transfer Status</th>
                             <td>{{ ucfirst($payment->status) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Delivery Status</th>
+                            <td>{{ ucfirst($payment->delivery_status) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td>{{ $payment->payment_method === 'bank_transfer' ? 'Bank Transfer' : 'Cash On Delivery (COD)'}}</td>
                         </tr>
                         <tr>
                             <th>Amount</th>

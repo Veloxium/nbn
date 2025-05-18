@@ -16,29 +16,33 @@ class PaymentController extends Controller
 {
 
 
-public function update(Request $request, $id): RedirectResponse
-{
-    // Hanya admin yang boleh update
-    if (Auth::user()->role !== 'admin') {
-        abort(403, 'Unauthorized');
+    public function update(Request $request, $id): RedirectResponse
+    {
+        // Hanya admin yang boleh update
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,completed,failed', // sesuaikan opsi status
+            'delivery_status' => 'required|in:waiting,packaged,shipped,delivered',
+            'no_resi' => 'nullable|string|max:255',
+        ]);
+
+        $payment = Payment::findOrFail($id);
+        $payment->status = $request->status;
+        $payment->delivery_status = $request->delivery_status;
+        $payment->no_resi = $request->no_resi;
+        if ($request->status === 'completed') {
+            $payment->paid_at = Carbon::now();
+        } else {
+            $payment->paid_at = null; // Kosongkan jika bukan completed
+        }
+        $payment->save();
+
+        return redirect()->route('admin.payments.index')
+            ->with('success', 'Payment status updated successfully.');
     }
-
-    $request->validate([
-        'status' => 'required|in:pending,completed,failed', // sesuaikan opsi status
-    ]);
-
-    $payment = Payment::findOrFail($id);
-    $payment->status = $request->status;
-    if ($request->status === 'completed') {
-        $payment->paid_at = Carbon::now();
-    } else {
-        $payment->paid_at = null; // Kosongkan jika bukan completed
-    }
-    $payment->save();
-
-    return redirect()->route('admin.payments.index')
-        ->with('success', 'Payment status updated successfully.');
-}
 
     public function show(string $id): View
     {
@@ -48,15 +52,15 @@ public function update(Request $request, $id): RedirectResponse
         return view('admin.proof.show', compact('payment'));
     }
 
-public function edit($id): View
-{
-    if (Auth::user()->role !== 'admin') {
-        abort(403, 'Unauthorized');
-    }
+    public function edit($id): View
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
 
-    $payment = Payment::findOrFail($id);
-    return view('admin.proof.edit', compact('payment'));
-}
+        $payment = Payment::findOrFail($id);
+        return view('admin.proof.edit', compact('payment'));
+    }
 
 
     public function index(): View
@@ -107,6 +111,12 @@ public function edit($id): View
         return view('payments.credit-card', compact('payment'));
     }
 
+    public function cod($id): View
+    {
+        $payment = Payment::with('items.product')->findOrFail($id);
+        return view('payments.cod', compact('payment'));
+    }
+
 
     public function store(Request $request)
     {
@@ -114,7 +124,8 @@ public function edit($id): View
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'postal_code' => 'required'
+            'postal_code' => 'required',
+            'payment_method' => 'required|in:cash_on_delivery,bank_transfer',
         ]);
 
         $user = Auth::id();
@@ -138,6 +149,7 @@ public function edit($id): View
             'postal_code' => $request->postal_code,
             'amount' => $totalAmount,
             'status' => 'pending',
+            'payment_method' => $request->payment_method
         ]);
 
         foreach ($cartItems as $item) {
@@ -154,6 +166,11 @@ public function edit($id): View
         Cart::where('user_id', $user)->delete();
         Product::whereIn('id', $cartItems->pluck('product_id'))->decrement('stock', $cartItems->sum('quantity'));
 
-        return redirect()->route('payments.credit', $payment->id);
+        // Redirect berdasarkan metode pembayaran
+        if ($payment->payment_method === 'cash_on_delivery') {
+            return redirect()->route('payments.cod', $payment->id);
+        } else {
+            return redirect()->route('payments.credit', $payment->id);
+        }
     }
 }
