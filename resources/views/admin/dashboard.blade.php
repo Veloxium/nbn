@@ -152,9 +152,9 @@
                                         {{ isset($payment->amount) ? 'Rp. ' . number_format($payment->amount, 0, ',', '.') : '-' }}
                                     </td>
                                     <td data-label="Date" class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</td>
-                                    <td data-label="Method">Bank Transfer</td>
-                                    <td data-label="Delivery Status" style="min-width: 160px;">Packing</td>
-                                    <td data-label="No. Resi" style="min-width: 160px;">IJIJWI934</td>
+                                    <td data-label="Method">{{$payment->payment_method === 'bank_transfer' ? 'Bank Transfer' : 'Cash On Delivery (COD)'}}</td>
+                                    <td data-label="Delivery Status" style="min-width: 160px;">{{ucfirst($payment->delivery_status)}}</td>
+                                    <td data-label="No. Resi" style="min-width: 160px;">{{$payment->no_resi}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
