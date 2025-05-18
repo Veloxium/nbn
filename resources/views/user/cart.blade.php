@@ -76,21 +76,17 @@
                 <div class="row mt-4 border-bottom border-dark pb-3">
                     <div class="col-6">
                         <p class="mb-0 text-start fs-5 fw-semibold">Subtotal</p>
-                        <p class="text-start fs-5 fw-semibold">Postage</p>
                     </div>
                     <div class="col-6 text-end">
                         <p class="mb-0 fs-5 fw-semibold">
                             Rp. {{ number_format($cartItems->sum(fn($item) => $item->product->price * $item->quantity), 0, ',', '.') }}
-                        </p>
-                        <p class="fs-5 fw-semibold">
-                            Rp. {{ number_format($cartItems->sum(fn($item) => $item->product->price * $item->quantity) * 0.1, 0, ',', '.') }}
                         </p>
                     </div>
                 </div>
 
                 <p class="mt-4 mb-0 text-center fs-4 fw-semibold">
                     Total: Rp.
-                    {{ number_format($cartItems->sum(fn($item) => $item->product->price * $item->quantity) * 1.1, 0, ',', '.') }}
+                    {{ number_format($cartItems->sum(fn($item) => $item->product->price * $item->quantity), 0, ',', '.') }}
                 </p>
                 <div class="p-4">
                     <a href="{{ route('payments.userform') }}" style="height: 60px;" class="d-flex btn mx-8 text-white mt-3 w-100 bg-black justify-content-center align-items-center fw-semibold fs-5">Checkout</a>
