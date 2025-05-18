@@ -71,6 +71,14 @@
                                         <td>{{ ucfirst($payment->status) }}</td>
                                     </tr>
                                     <tr>
+                                        <th>Payment Method</th>
+                                        <td>{{ $payment->payment_method === 'bank_transfer' ? 'Bank Transfer' : 'Cash On Delivery (COD)'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Delivery Status</th>
+                                        <td>{{ ucfirst($payment->delivery_status) }}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Amount</th>
                                         <td>Rp{{ number_format($payment->amount, 0, ',', '.') }}</td>
                                     </tr>
@@ -98,7 +106,7 @@
                                         <tr>
                                             <th>Image</th>
                                             <th>Product Name</th>
-                                            <th>Color</th>
+                                            <th>Selected Color</th>
                                             <th>Quantity</th>
                                             <th>Price</th>
                                         </tr>
