@@ -16,7 +16,7 @@ return new class extends Migration
             $table->enum('delivery_status', ['waiting', 'packaged', 'shipped', 'delivered'])
                 ->default('waiting')
                 ->after('payment_method');
-            $table->string('no_resi')->nullable()->after('product_status');
+            $table->string('no_resi')->nullable()->after('status');
         });
     }
 

@@ -87,7 +87,7 @@ class PaymentController extends Controller
     public function uploadProof(Request $request, Payment $payment)
     {
         $request->validate([
-            'proof_of_payment' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+            'proof_of_payment' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
         ]);
 
         if ($request->hasFile('proof_of_payment')) {
