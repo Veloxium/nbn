@@ -133,6 +133,7 @@
                                     <th>Status</th>
                                     <th>Amount</th>
                                     <th style="min-width: 120px;">Date</th>
+                                    <th>Method</th>
                                     <th style="min-width: 160px;">Delivery Status</th>
                                     <th style="min-width: 160px;">No. Resi</th>
                                 </tr>
@@ -151,6 +152,7 @@
                                         {{ isset($payment->amount) ? 'Rp. ' . number_format($payment->amount, 0, ',', '.') : '-' }}
                                     </td>
                                     <td data-label="Date" class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</td>
+                                    <td data-label="Method">Bank Transfer</td>
                                     <td data-label="Delivery Status" style="min-width: 160px;">Packing</td>
                                     <td data-label="No. Resi" style="min-width: 160px;">IJIJWI934</td>
                                 </tr>
