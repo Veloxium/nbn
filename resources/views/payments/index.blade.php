@@ -42,9 +42,15 @@
                     <a href="{{ route('payments.proof', $payment->id) }}" class="btn btn-sm btn-primary mt-4">
                         Upload Proof of Payment
                     </a>
+                    @if ($payment->payment_method === 'bank_transfer')
                     <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-warning px-4 mt-4">
                         Pay Now
                     </a>
+                    @else
+                    <a href="{{ route('payments.cod', $payment->id) }}" class="btn btn-sm btn-warning px-4 mt-4">
+                        Pay Now
+                    </a>
+                    @endif
                     @else
                     @if ($payment->payment_method === 'bank_transfer')
                     <a href="{{ route('payments.credit', $payment->id) }}" class="btn btn-sm btn-primary mt-4">

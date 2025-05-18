@@ -132,7 +132,7 @@
                                     <th>#</th>
                                     <th>Status</th>
                                     <th>Amount</th>
-                                    <th style="min-width: 120px;">Date</th>
+                                    <th style="min-width: 120px;">Created At</th>
                                     <th>Method</th>
                                     <th style="min-width: 160px;">Delivery Status</th>
                                     <th style="min-width: 160px;">No. Resi</th>
