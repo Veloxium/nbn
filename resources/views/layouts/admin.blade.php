@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }} - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js']) <!-- Menyertakan asset yang diperlukan -->
+    @yield('styles')
 </head>
 
 <body class="font-sans antialiased">

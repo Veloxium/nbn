@@ -1,5 +1,41 @@
 @extends('layouts.admin')
 
+@section('style')
+<style>
+    @media (max-width: 768px) {
+        .table-responsive table thead {
+            display: none;
+        }
+        .table-responsive table tbody tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .table-responsive table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 1rem;
+        }
+        .table-responsive table tbody td:last-child {
+            border-bottom: none;
+        }
+        .table-responsive table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #495057;
+            flex-basis: 50%;
+            text-align: left;
+        }
+    }
+    </style>
+@endsection
+
 @section('content')
 <div class="container">
     <h1>Welcome to the Admin Dashboard</h1>
@@ -89,34 +125,39 @@
             <div class="card">
                 <div class="card-header">Recent Payments</div>
                 <div class="row g-3 p-3">
-                    <table class="table table-striped table-hover mb-0"
-                        style="max-height: 300px; overflow-y: auto;">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($latestPayments as $payment)
-                            <tr>
-                                <td>Payment #{{ $payment->id }}</td>
-                                <td>
-                                    @php $status = $payment->status; @endphp
-                                    <span class="badge bg-{{ $status === 'completed' ? 'success' : ($status === 'failed' ? 'danger' : 'primary') }} fs-6 fw-bold">
-                                        {{ ucfirst($status) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    {{ isset($payment->amount) ? 'Rp. ' . number_format($payment->amount, 0, ',', '.') : '-' }}
-                                </td>
-                                <td class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th style="min-width: 120px;">Date</th>
+                                    <th style="min-width: 160px;">Delivery Status</th>
+                                    <th style="min-width: 160px;">No. Resi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($latestPayments as $payment)
+                                <tr>
+                                    <td data-label="Payment #">{{ $payment->id }}</td>
+                                    <td data-label="Status">
+                                        @php $status = $payment->status; @endphp
+                                        <span class="badge bg-{{ $status === 'completed' ? 'success' : ($status === 'failed' ? 'danger' : 'primary') }} fs-6 fw-bold">
+                                            {{ ucfirst($status) }}
+                                        </span>
+                                    </td>
+                                    <td data-label="Amount">
+                                        {{ isset($payment->amount) ? 'Rp. ' . number_format($payment->amount, 0, ',', '.') : '-' }}
+                                    </td>
+                                    <td data-label="Date" class="text-muted">{{ $payment->created_at->format('d M Y H:i') }}</td>
+                                    <td data-label="Delivery Status" style="min-width: 160px;">Packing</td>
+                                    <td data-label="No. Resi" style="min-width: 160px;">IJIJWI934</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
